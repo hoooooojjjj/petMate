@@ -11,6 +11,64 @@ import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 
 export default function Signup() {
+
+  const [idValid, setIdValid] = useState(true);
+  const [validIdMsg, setValidIdMsg] = useState("");
+
+  const idValidCheck = () => {
+    const idCheck = true; // 중복 데이터 가져오기
+    if (idCheck) {
+      setIdValid(true);
+      setValidIdMsg("사용가능한 아이디 입니다.");
+    } else {
+      setIdValid(false);
+      setValidIdMsg("이미 사용중인 아이디 입니다.");
+    }
+  };
+
+  const [pwValid, setPwValid] = useState(true);
+  const [validPwMsg, setValidPwMsg] = useState("");
+
+  const pwValidCheck = () => {
+    const pwCheck = true; // 비밀번호 유효성
+    if (pwCheck) {
+      setPwValid(true);
+      setValidPwMsg("")
+    } else {
+      setPwValid(false);
+      setValidPwMsg("8~16자 영문자, 숫자 조합을 사용하세요.")
+    }
+  };
+
+  const [rePwValid, setRePwValid] = useState(true);
+  const [validRePwMsg, setValidRePwMsg] = useState("");
+
+  const rePwValidCheck = () => {
+    const rePwCheck = true; // 비밀번호 일치
+    if (rePwCheck) {
+      setRePwValid(true);
+      setValidRePwMsg("비밀번호가 일치합니다.")
+    } else {
+      setRePwValid(false);
+      setValidRePwMsg("비밀번호가 일치하지 않습니다.")
+    }
+  };
+
+
+  const [nickValid, setNickValid] = useState(true);
+  const [nickValidMsg, setNickValidMsg] = useState("");
+
+  const nickValidCheck = () => {
+    const nickCheck = true; // 중복 데이터 가져오기
+    if (nickCheck) {
+      setNickValid(true);
+      setNickValidMsg("사용가능한 닉네임 입니다.");
+    } else {
+      setNickValid(false);
+      setNickValidMsg("이미 사용중인 닉네임 입니다.");
+    }
+  };
+
   return (
     <Container component="main" maxWidth="xs">
       <Box
@@ -37,12 +95,15 @@ export default function Signup() {
                 label="아이디"
                 name="id"
                 autoComplete="id"
-                size="small" />
+                size="small"
+                error={!idValid}
+                helperText={validIdMsg} />
             </Grid>
             <Grid item xs={4}>
-              <Button 
-              variant="outlined"
-              fullWidth>
+              <Button
+                variant="outlined"
+                fullWidth
+                onClick={idValidCheck}>
                 중복확인
               </Button>
             </Grid>
@@ -55,17 +116,21 @@ export default function Signup() {
                 type="password"
                 id="password"
                 autoComplete="new-password"
-                size="small" />
+                size="small"
+                error={!pwValid}
+                helperText={validPwMsg} />
             </Grid>
             <Grid item xs={12}>
               <TextField
                 required
                 fullWidth
-                name="passwordCheck"
+                name="rePassword"
                 label="비밀번호 확인"
-                type="passwordCheck"
-                id="passwordCheck"
-                size="small" />
+                type="rePassword"
+                id="rePassword"
+                size="small"
+                error={!rePwValid}
+                helperText={validRePwMsg} />
             </Grid>
             <Grid item xs={8}>
               <TextField
@@ -75,12 +140,15 @@ export default function Signup() {
                 label="닉네임"
                 name="nickName"
                 autoComplete="nickName"
-                size="small" />
+                size="small"
+                error={!nickValid}
+                helperText={nickValidMsg} />
             </Grid>
             <Grid item xs={4}>
-              <Button 
-              variant="outlined"
-              fullWidth>
+              <Button
+                variant="outlined"
+                fullWidth
+                onClick={nickValidCheck}>
                 중복확인
               </Button>
             </Grid>
@@ -113,11 +181,11 @@ export default function Signup() {
             </Grid>
           </Grid>
           <Grid item xs={12}>
-                <FormControlLabel
-                  control={<Checkbox value="allowPersonal" color="primary" />}
-                  label="(선택) 개인정보 수집 동의"
-                />
-              </Grid>
+            <FormControlLabel
+              control={<Checkbox value="allowPersonal" color="primary" />}
+              label="(선택) 개인정보 수집 동의"
+            />
+          </Grid>
           <Button
             type="submit"
             fullWidth
