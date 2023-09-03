@@ -1,4 +1,5 @@
 import "./App.css";
+
 import SignUp from "./page/SignUp";
 
 function App() {
@@ -7,6 +8,5 @@ function App() {
       <SignUp />
     </div>
   );
-}
 
 export default App;
