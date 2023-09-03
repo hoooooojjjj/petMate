@@ -1,10 +1,12 @@
 import "./App.css";
-import MainPage from "./MainPage";
-function App() {
-  return <div className="App">
-    <MainPage />
 
-  </div>;
-}
+import SignUp from "./page/SignUp";
+
+function App() {
+  return (
+    <div className="App">
+      <SignUp />
+    </div>
+  );
 
 export default App;
