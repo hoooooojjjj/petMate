@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Container, Box, Typography, Button, Divider, Stack, TextField } from '@mui/material';
-import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import CommentIcon from '@mui/icons-material/Comment';
 import { useNavigate } from "react-router-dom";
 
@@ -19,7 +18,7 @@ export default function MainPage() {
     //DB연결 필요
     const posts = [
         { id: "User11", likes: 0, content: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', comments: [{ userId: 'Commenter1', content: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.' }] },
-        { id: "User22", content: '두번째 포스트', likes: 0, comments: [{ userId: 'Commenter2', content: '안녕하세요.' }, { userId: 'Commenter2', content: '두번째 댓글입니다.' }] },
+        { id: "User22", content: '두번째 포스트', likes: 0, comments: [{ userId: 'Commenter2', content: '안녕하세요.' }, { userId: 'Commenter2', content: '두번째 댓글입니다.' }, { userId: 'Commenter2', content: '두번째 댓글입니다.' }, { userId: 'Commenter2', content: '두번째 댓글입니다.' }, { userId: 'Commenter2', content: '두번째 댓글입니다.' }, { userId: 'Commenter2', content: '두번째 댓글입니다.' }, { userId: 'Commenter2', content: '두번째 댓글입니다.' }, { userId: 'Commenter2', content: '두번째 댓글입니다.' }, { userId: 'Commenter2', content: '두번째 댓글입니다.' }, { userId: 'Commenter2', content: '두번째 댓글입니다.' }, { userId: 'Commenter2', content: '두번째 댓글입니다.' }, { userId: 'Commenter2', content: '두번째 댓글입니다.' }, { userId: 'Commenter2', content: '두번째 댓글입니다.' }] },
         { id: "User33", content: '세번째 포스트', likes: 0, comments: [{ userId: 'Commenter3', content: '안녕하세요.' }, { userId: 'Commenter3', content: '세번째 댓글입니다.' }] },
         { id: "User44", content: '네번째 포스트', likes: 0, comments: [] },
         { id: "User55", content: '다섯번째 포스트', likes: 0, comments: [{ userId: 'Commenter5', content: '안녕하세요.' }, { userId: 'Commenter5', content: '다섯번째 댓글입니다.' }] },
@@ -87,8 +86,16 @@ function Post({ post }) {
                     <Typography ml={1}>댓글 수: {post.comments.length}</Typography>
                 </Box>
                 <Box flexGrow={1} display="flex" justifyContent="center">
-                    <ThumbUpIcon />
-                    <Typography ml={1}>좋아요: {post.likes}</Typography>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => {
+                        alert(comment);
+                        setComment('');
+                    }}
+                >
+                {}
+                </Button>
                 </Box>
             </Box>
             {post.comments.map((comment) => (
