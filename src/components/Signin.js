@@ -1,17 +1,16 @@
 import React from "react";
-import TextField from '@mui/material/TextField';
-import Checkbox from '@mui/material/Checkbox';
-import Button from '@mui/material/Button';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
+import { TextField, Checkbox, Button, FormControlLabel, Grid,
+  Typography, Avatar, Box, Container } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Avatar from '@mui/material/Avatar';
-import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
+import { useNavigate,Link  } from "react-router-dom";
 
 export default function Signin() {
+  const navigate = useNavigate();
+  const login = () => {
+    //로그인 로직이 필요합니다.
+
+    navigate("/MainPage");
+  }
   return (
     <Container component="main" maxWidth="xs">
       <Box
@@ -51,6 +50,7 @@ export default function Signin() {
           type="submit"
           fullWidth
           variant="contained"
+          onClick={login}
           sx={{ mt: 3, mb: 2 }} >
           로그인
         </Button>
@@ -59,7 +59,7 @@ export default function Signin() {
             <Link>비밀번호 찾기</Link>
           </Grid>
           <Grid item>
-            <Link>회원가입</Link>
+            <Link to="/signup">회원가입</Link>
           </Grid>
         </Grid>
       </Box>

@@ -1,20 +1,22 @@
-import React from 'react';
-import Avatar from '@mui/material/Avatar';
+import React,{useState} from 'react';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Button from '@mui/material/Button';
-import Grid from '@mui/material/Grid';
-import Container from '@mui/material/Container';
-import Box from '@mui/material/Box';
+import { Avatar, Typography, TextField, FormControlLabel, Checkbox,
+  Button, Grid, Container, Box } from '@mui/material';
 
+import { useNavigate,Link  } from "react-router-dom";
 export default function Signup() {
 
   const [idValid, setIdValid] = useState(true);
   const [validIdMsg, setValidIdMsg] = useState("");
+  const navigate = useNavigate();
 
+  //가입하기 버튼을 눌렀을 때 발생하는 로직입니다.
+  const register = () => {
+    //회원가입 조건 체크
+    
+    //이동
+    navigate("/signin");
+  }
   const idValidCheck = () => {
     const idCheck = true; // 중복 데이터 가져오기
     if (idCheck) {
@@ -190,6 +192,7 @@ export default function Signup() {
             type="submit"
             fullWidth
             variant="contained"
+            onClick ={register}
             sx={{ mt: 3, mb: 2 }}>
             가입하기
           </Button>
