@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Container, Box, Typography, Button, Divider, Stack, TextField } from '@mui/material';
-import CommentIcon from '@mui/icons-material/Comment';
 import { useNavigate } from "react-router-dom";
 
 export default function MainPage() {
@@ -17,13 +16,9 @@ export default function MainPage() {
 
     //DB연결 필요
     const posts = [
-        { id: "User11", likes: 0, content: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', comments: [{ userId: 'Commenter1', content: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.' }] },
-        { id: "User22", content: '두번째 포스트', likes: 0, comments: [{ userId: 'Commenter2', content: '안녕하세요.' }, { userId: 'Commenter2', content: '두번째 댓글입니다.' }, { userId: 'Commenter2', content: '두번째 댓글입니다.' }, { userId: 'Commenter2', content: '두번째 댓글입니다.' }, { userId: 'Commenter2', content: '두번째 댓글입니다.' }, { userId: 'Commenter2', content: '두번째 댓글입니다.' }, { userId: 'Commenter2', content: '두번째 댓글입니다.' }, { userId: 'Commenter2', content: '두번째 댓글입니다.' }, { userId: 'Commenter2', content: '두번째 댓글입니다.' }, { userId: 'Commenter2', content: '두번째 댓글입니다.' }, { userId: 'Commenter2', content: '두번째 댓글입니다.' }, { userId: 'Commenter2', content: '두번째 댓글입니다.' }, { userId: 'Commenter2', content: '두번째 댓글입니다.' }] },
-        { id: "User33", content: '세번째 포스트', likes: 0, comments: [{ userId: 'Commenter3', content: '안녕하세요.' }, { userId: 'Commenter3', content: '세번째 댓글입니다.' }] },
-        { id: "User44", content: '네번째 포스트', likes: 0, comments: [] },
-        { id: "User55", content: '다섯번째 포스트', likes: 0, comments: [{ userId: 'Commenter5', content: '안녕하세요.' }, { userId: 'Commenter5', content: '다섯번째 댓글입니다.' }] },
-        { id: "User66", content: '여섯번째 포스트', likes: 0, comments: [{ userId: 'Commenter6', content: '안녕하세요.' }, { userId: 'Commenter6', content: '여섯번째 댓글입니다.' }] },
-        { id: "User77", content: '일곱번째 포스트', likes: 0, comments: [{ userId: 'Commenter7', content: '안녕하세요.' }, { userId: 'Commenter7', content: '일곱번째 댓글입니다.' }] },
+        { id: "User1", title: '서울숲 산책하기', content: '날짜/시간, 장소, 인원', comments: [{ userId: 'User2', content: '참석합니다~' }, { userId: 'User3', content: '저두요!' }] },
+        { id: "User2", title: '애견카페 같이가요~', content: '날짜/시간, 장소, 인원', comments: [] },
+        { id: "User3", title: '망원 한강공원 산책하기', content: '날짜/시간, 장소, 인원', comments: [] },
     ];
 
     /* eslint-disable */
@@ -54,13 +49,13 @@ export default function MainPage() {
 
                 <Button variant="contained" onClick={write}>
 
-                    <Typography variant='h6'>글 작성</Typography>
+                    <Typography variant='h6'>모집하기</Typography>
                 </Button>
             </Box>
 
             <Stack direction="column" spacing={2}>
                 {filteredPosts.map((post) => (
-                    <Post post={post} />
+                    <Post post={post} key={post.id} />
                 ))}
 
 
@@ -71,62 +66,65 @@ export default function MainPage() {
 }
 
 function Post({ post }) {
-    const [comment, setComment] = useState("");
+    const [commentText, setCommentText] = useState("");
+    const [showComments, setShowComments] = useState(false);
+
     return (
         <Box key={post.id} p={1} border={1} borderRadius='borderRadius' borderColor="#ddd">
-            <Typography variant='h6' sx={{ wordWrap: 'break-word' }}>{post.id}</Typography>
-            <Box minHeight="15vh">
-                <Typography sx={{ wordWrap: 'break-word' }}>{post.content}</Typography>
+            <Box display="flex" justifyContent="space-between" alignItems="center">
+                <Typography variant='h6' sx={{ wordWrap: 'break-word', flex: 1 }}>{post.title}</Typography>
+                <Typography variant='subtitle2' sx={{ wordWrap: 'break-word', flex: 1, textAlign: 'right' }}>{post.id}</Typography>
+            </Box>
+            <Box minHeight="15vh" sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <Typography sx={{ wordWrap: 'break-word', textAlign: 'center' }}>
+                    {post.content.split(', ').map((item, index) => (
+                        <React.Fragment key={index}>
+                            {item}
+                            <br />
+                        </React.Fragment>
+                    ))}
+                </Typography>
             </Box>
 
             <Divider />
             <Box display="flex" p={1}>
                 <Box flexGrow={1} display="flex" justifyContent="center">
-                    <CommentIcon />
-                    <Typography ml={1}>댓글 수: {post.comments.length}</Typography>
+                    <Button variant="contained" onClick={() => setShowComments(!showComments)}>
+                        {showComments ? `댓글 숨기기` : `댓글(${post.comments.length})`}
+                    </Button>
                 </Box>
-                <Box flexGrow={1} display="flex" justifyContent="center">
-                <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => {
-                        alert(comment);
-                        setComment('');
-                    }}
-                >
-                {}
-                </Button>
-                </Box>
+
             </Box>
-            {post.comments.map((comment) => (
+            {showComments && (
                 <>
-                    <Divider />
-                    <Typography sx={{ wordWrap: 'break-word' }} variant='body1' mt={2}>{comment.userId} </Typography>
-                    <Typography sx={{ wordWrap: 'break-word' }} variant='body1' mt={1} mb={2}>{comment.content}</Typography>
-
+                    {post.comments.map((comment) => (
+                        <>
+                            <Divider />
+                            <Typography sx={{ wordWrap: 'break-word' }} variant='subtitle2' mt={2}>{comment.userId}</Typography>
+                            <Typography sx={{ wordWrap: 'break-word' }} variant='body2' mt={1} mb={2}>{comment.content}</Typography>
+                        </>
+                    ))}
+                    <Box display="flex" alignItems="center" mt={2}>
+                        <TextField
+                            label="댓글 달기"
+                            variant="outlined"
+                            fullWidth
+                            value={commentText}
+                            onChange={(e) => setCommentText(e.target.value)}
+                        />
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={() => {
+                                setCommentText('');
+                            }}
+                            style={{ marginLeft: 10 }}
+                        >
+                            등록
+                        </Button>
+                    </Box>
                 </>
-            ))}
-            <Box display="flex" alignItems="center" mt={2}>
-                <TextField
-                    label="댓글 달기"
-                    variant="outlined"
-                    fullWidth
-                    value={comment}
-                    onChange={(e) => setComment(e.target.value)}
-                />
-                <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => {
-                        alert(comment);
-                        setComment('');
-                    }}
-                    style={{ marginLeft: 10 }}
-                >
-                    게시
-                </Button>
-            </Box>
-
+            )}
         </Box>
     );
 }
