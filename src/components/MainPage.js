@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Container, Box, Typography, Button, Divider, Stack, TextField } from '@mui/material';
+import { Container, Box, Typography, Button, Divider, Stack, TextField, AppBar, Toolbar } from '@mui/material';
 import { useNavigate } from "react-router-dom";
 
 export default function MainPage() {
@@ -12,6 +12,10 @@ export default function MainPage() {
     const write = () => {
         //글 작성 페이지로 이동
         navigate("/InsertForm");
+    };
+
+    const handleSignInClick = () => {
+        navigate("/Signin");
     };
 
     //DB연결 필요
@@ -30,27 +34,46 @@ export default function MainPage() {
         );
     }, [searchTerm]);
 
+    const searchPosts = () => {
+        // 검색어를 사용하여 게시물 필터링
+        const filtered = posts.filter((post) =>
+            post.content.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+        setFilteredPosts(filtered);
+    };
+
+
+
     return (
         <Container maxWidth="md">
+
+            <AppBar position="static" elevation={0} color="inherit" >
+
+                <Toolbar sx={{ justifyContent: 'space-between' }}>
             <Box my={4} display="flex" justifyContent="center">
                 <Typography variant="h2">Pet Mate</Typography>
+                <Button variant="contained" onClick={write} sx={{ fontSize: '14px', padding: '14px', height: '50px', marginTop:'10px' ,marginLeft: '20px' }}>
+                <Typography variant='h5'>모집하기</Typography>
+            </Button>
             </Box>
 
-            <Box display="flex" justifyContent="space-between" mb={2}>
+                    <Button variant='text' onClick={handleSignInClick}>
+                        로그인
+                    </Button>
+                </Toolbar>
+            </AppBar>
+
+
+            <Box display="flex" justifyContent="center" mb={2}>
 
                 <TextField
-                    label='Search'
+                    label='검색하기'
                     variant='outlined'
-                    sx={{ width: '70%' }}
+                    sx={{ width: '50%', textAlign: 'center' }}
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                 />
 
-
-                <Button variant="contained" onClick={write}>
-
-                    <Typography variant='h6'>모집하기</Typography>
-                </Button>
             </Box>
 
             <Stack direction="column" spacing={2}>
@@ -89,7 +112,7 @@ function Post({ post }) {
             <Divider />
             <Box display="flex" p={1}>
                 <Box flexGrow={1} display="flex" justifyContent="center">
-                    <Button variant="contained" onClick={() => setShowComments(!showComments)}>
+                    <Button variant="text" onClick={() => setShowComments(!showComments)}>
                         {showComments ? `댓글 숨기기` : `댓글(${post.comments.length})`}
                     </Button>
                 </Box>
