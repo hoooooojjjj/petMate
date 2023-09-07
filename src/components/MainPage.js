@@ -1,6 +1,25 @@
 import React, { useState, useEffect } from "react";
 import { Container, Box, Typography, Button, Divider, Stack, TextField, AppBar, Toolbar } from '@mui/material';
 import { useNavigate } from "react-router-dom";
+import { initializeApp } from 'firebase/app';
+import { getFirestore, collection, addDoc } from 'firebase/firestore';
+
+
+const firebaseConfig = {
+  apiKey: process.env.REACT_APP_API_KEY,
+  authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_APP_ID,
+};
+
+const firebaseApp = initializeApp(firebaseConfig);
+const db = getFirestore(firebaseApp);
+
+
+
+
 
 export default function MainPage() {
     const navigate = useNavigate();
@@ -8,8 +27,8 @@ export default function MainPage() {
 
     const [searchTerm, setSearchTerm] = useState("");
     const [filteredPosts, setFilteredPosts] = useState([]);
+
     const write = () => {
-        //글 작성 페이지로 이동
         navigate("/InsertForm");
     };
 
@@ -38,6 +57,7 @@ export default function MainPage() {
         });
         setPosts(newPosts);
     }
+    
     /* eslint-disable */
     useEffect(() => {
         setFilteredPosts(
@@ -47,13 +67,6 @@ export default function MainPage() {
         );
     }, [searchTerm,posts]);
 
-    const searchPosts = () => {
-        // 검색어를 사용하여 게시물 필터링
-        const filtered = posts.filter((post) =>
-            post.content.toLowerCase().includes(searchTerm.toLowerCase())
-        );
-        setFilteredPosts(filtered);
-    };
 
 
 
@@ -105,16 +118,43 @@ function Post({ post, addComment }) {
     const [commentText, setCommentText] = useState("");
     const [showComments, setShowComments] = useState(false);
 
-    //TODO::바로 밑 지우기
-    const MyAddress = "잠만보";
-    const HandleAddButton = () => {
-        if (commentText !== "") {
-            console.log(post.id);
-            let newComment = { userId: MyAddress, content: commentText };
-            addComment(post.id, newComment);
-            setCommentText("");
-        }
-    }
+    const HandleAddButton = (postId) => {
+        
+        const newComment = {
+            userId: "아이디", 
+            content: commentText,
+        };
+    
+        addComment(postId, newComment);
+    
+        // TODO: 여기서 댓글을 DB에 전송하는 API 호출 또는 다른 작업을 수행하세요.
+        const HandleAddButton = async (postId) => {
+            const newComment = {
+                userId: "아이디",
+                content: commentText,
+                timestamp: new Date(), // 댓글 작성 시간을 저장할 수 있습니다.
+            };
+        
+            try {
+                // Firestore에 댓글 추가
+                const docRef = await addDoc(collection(db, "comments"), newComment);
+        
+                // 댓글 추가가 성공하면 해당 댓글의 ID(docRef.id)를 받을 수 있습니다.
+        
+                // 이제 해당 댓글을 현재 게시물에 추가할 수 있습니다.
+                addComment(postId, { userId: newComment.userId, content: newComment.content });
+        
+                // 댓글 입력 필드 초기화
+                setCommentText("");
+            } catch (error) {
+                console.error("Error adding comment: ", error);
+            }
+        };
+    
+        setCommentText("");
+    };
+    
+
     return (
         <Box key={post.id} p={1} border={1} borderRadius='borderRadius' borderColor="#ddd">
             <Box display="flex" justifyContent="space-between" alignItems="center">
@@ -150,11 +190,13 @@ function Post({ post, addComment }) {
                             <Typography sx={{ wordWrap: 'break-word' }} variant='body2' mt={1} mb={2}>{comment.content}</Typography>
                         </React.Fragment>
                     ))}
-                    <Box display="flex" alignItems="center" mt={2}>
+                    <Box display="flex" alignItems="flex-start" mt={2}>
                         <TextField
                             label="댓글 달기"
                             variant="outlined"
                             fullWidth
+                            multiline
+                            size="small"
                             value={commentText}
                             onChange={(e) => setCommentText(e.target.value)}
                         />
@@ -163,7 +205,7 @@ function Post({ post, addComment }) {
                             color="primary"
                             onClick={() => {
 
-                                HandleAddButton();
+                                HandleAddButton(post.id);
                             }}
                             style={{ marginLeft: 10 }}
                         >
