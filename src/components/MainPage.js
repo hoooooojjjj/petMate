@@ -6,12 +6,12 @@ import { getFirestore, collection, addDoc } from 'firebase/firestore';
 
 
 const firebaseConfig = {
-  apiKey: process.env.REACT_APP_API_KEY,
-  authDomain: process.env.REACT_APP_AUTH_DOMAIN,
-  projectId: process.env.REACT_APP_PROJECT_ID,
-  storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
-  messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
-  appId: process.env.REACT_APP_APP_ID,
+    apiKey: process.env.REACT_APP_API_KEY,
+    authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+    projectId: process.env.REACT_APP_PROJECT_ID,
+    storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+    messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
+    appId: process.env.REACT_APP_APP_ID,
 };
 
 const firebaseApp = initializeApp(firebaseConfig);
@@ -57,7 +57,7 @@ export default function MainPage() {
         });
         setPosts(newPosts);
     }
-    
+
     /* eslint-disable */
     useEffect(() => {
         setFilteredPosts(
@@ -65,7 +65,7 @@ export default function MainPage() {
                 post.content.toLowerCase().includes(searchTerm.toLowerCase())
             )
         );
-    }, [searchTerm,posts]);
+    }, [searchTerm, posts]);
 
 
 
@@ -76,12 +76,12 @@ export default function MainPage() {
             <AppBar position="static" elevation={0} color="inherit" >
 
                 <Toolbar sx={{ justifyContent: 'space-between' }}>
-            <Box my={4} display="flex" justifyContent="center">
-                <Typography variant="h2">Pet Mate</Typography>
-                <Button variant="contained" onClick={write} sx={{ fontSize: '14px', padding: '14px', height: '50px', marginTop:'10px' ,marginLeft: '20px' }}>
-                <Typography variant='h5'>모집하기</Typography>
-            </Button>
-            </Box>
+                    <Box my={4} display="flex" justifyContent="center">
+                        <Typography variant="h2">Pet Mate</Typography>
+                        <Button variant="contained" onClick={write} sx={{ fontSize: '14px', padding: '14px', height: '50px', marginTop: '10px', marginLeft: '20px' }}>
+                            <Typography variant='h5'>모집하기</Typography>
+                        </Button>
+                    </Box>
 
                     <Button variant='text' onClick={handleSignInClick}>
                         로그인
@@ -119,41 +119,37 @@ function Post({ post, addComment }) {
     const [showComments, setShowComments] = useState(false);
 
     const HandleAddButton = (postId) => {
-        
+
         const newComment = {
-            userId: "아이디", 
+            userId: "아이디",
             content: commentText,
         };
-    
+
         addComment(postId, newComment);
-    
+
         // TODO: 여기서 댓글을 DB에 전송하는 API 호출 또는 다른 작업을 수행하세요.
+
         const HandleAddButton = async (postId) => {
             const newComment = {
                 userId: "아이디",
                 content: commentText,
-                timestamp: new Date(), // 댓글 작성 시간을 저장할 수 있습니다.
+
             };
-        
+
             try {
-                // Firestore에 댓글 추가
                 const docRef = await addDoc(collection(db, "comments"), newComment);
-        
-                // 댓글 추가가 성공하면 해당 댓글의 ID(docRef.id)를 받을 수 있습니다.
-        
-                // 이제 해당 댓글을 현재 게시물에 추가할 수 있습니다.
+
                 addComment(postId, { userId: newComment.userId, content: newComment.content });
-        
-                // 댓글 입력 필드 초기화
+
                 setCommentText("");
             } catch (error) {
                 console.error("Error adding comment: ", error);
             }
         };
-    
+
         setCommentText("");
     };
-    
+
 
     return (
         <Box key={post.id} p={1} border={1} borderRadius='borderRadius' borderColor="#ddd">
