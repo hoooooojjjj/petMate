@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Container, Box, Typography, Button, Divider, Stack, TextField, AppBar, Toolbar } from '@mui/material';
 import { useNavigate } from "react-router-dom";
 import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, addDoc } from 'firebase/firestore';
+import { getFirestore, collection, addDoc, onSnapshot } from 'firebase/firestore';
 
 
 const firebaseConfig = {
@@ -36,14 +36,50 @@ export default function MainPage() {
         navigate("/Signin");
     };
 
-    //DB연결 필요
     const [posts, setPosts] = useState([
         { id: 1, UserName: "User1", title: '서울숲 산책하기', content: '날짜/시간, 장소, 인원', comments: [{ userId: 'User2', content: '참석합니다~' }, { userId: 'User3', content: '저두요!' }] },
         { id: 2, UserName: "User2", title: '애견카페 같이가요~', content: '날짜/시간, 장소, 인원', comments: [] },
         { id: 3, UserName: "User3", title: '망원 한강공원 산책하기', content: '날짜/시간, 장소, 인원', comments: [] },
     ]);
 
-    //TODO:: DB연결 시 DB에 댓글 추가하는 부분으로 수정해야됨
+    /* useEffect(() => {
+        const fetchPosts = async () => {
+          try {
+            const postsCollection = collection(db, "posts");
+            const unsubscribe = onSnapshot(postsCollection, (snapshot) => {
+              const postsData = [];
+              snapshot.forEach((doc) => {
+                postsData.push({ id: doc.id, ...doc.data() });
+              });
+              setPosts(postsData);
+            });
+            if (unsubscribe && typeof unsubscribe === "function") {
+                return () => unsubscribe();
+              }
+            } catch (error) {
+              console.error("Error fetching posts: ", error);
+            }
+          }; 
+      
+        
+    
+        const unsubscribe = fetchPosts();
+
+        return () => {
+            if (unsubscribe) {
+              unsubscribe();
+            }
+          };
+        }, []);
+
+        useEffect(() => {
+            setFilteredPosts(
+              posts.filter((post) =>
+                post.content.toLowerCase().includes(searchTerm.toLowerCase())
+              )
+            );
+          }, [searchTerm, posts]);  */
+
     const addComment = (postId, comment) => {
         let newPosts = posts.map((post) => {
 
