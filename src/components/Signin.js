@@ -15,7 +15,7 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
 } from "firebase/auth";
-import { auth } from "./Myfirebase";
+import { auth } from "../Myfirebase";
 
 export default function Signin() {
   const navigate = useNavigate();

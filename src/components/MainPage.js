@@ -1,26 +1,26 @@
 import React, { useState, useEffect } from "react";
 import { Container, Box, Typography, Button, Divider, Stack, TextField, AppBar, Toolbar } from '@mui/material';
 import { useNavigate } from "react-router-dom";
-import {collection,query, where, setDoc,getDocs,arrayUnion,onSnapshot   } from 'firebase/firestore';
-import { DB } from "./Myfirebase.js";
+import { collection, query, where, setDoc, getDocs, arrayUnion, onSnapshot } from 'firebase/firestore';
+import { DB } from "../Myfirebase.js";
 
-export default function MainPage() {
+export default function MainPage({user, isLogin}) {
     const navigate = useNavigate();
-    const [posts,setPosts] = useState([]);
+    const [posts, setPosts] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [filteredPosts, setFilteredPosts] = useState([]);
 
     useEffect(() => {
-        const postsCollection = collection(DB,"posts");
-        const unsubscribe = onSnapshot(postsCollection,(snapshot) => {
-            let postData = snapshot.docs.map(doc => ({...doc.data(), firestoreId: doc.id}));
+        const postsCollection = collection(DB, "posts");
+        const unsubscribe = onSnapshot(postsCollection, (snapshot) => {
+            let postData = snapshot.docs.map(doc => ({ ...doc.data(), firestoreId: doc.id }));
             setPosts(postData);
         });
 
         return () => unsubscribe();
     }, []);
 
-        
+
     /* eslint-disable */
     useEffect(() => {
         setFilteredPosts(
@@ -29,8 +29,12 @@ export default function MainPage() {
             )
         );
     }, [searchTerm, posts]);
-    
+
     const write = () => {
+        if(!isLogin){
+            alert("로그인이 필요합니다.");
+            return;
+        }
         navigate("/InsertForm");
     };
 
@@ -45,7 +49,7 @@ export default function MainPage() {
         const querySnapshot = await getDocs(q);
         if (!querySnapshot.empty) {
             const postDoc = querySnapshot.docs[0];
-            
+
             await setDoc(postDoc.ref, {
                 comments: arrayUnion(comment)
             }, { merge: true });
@@ -64,12 +68,16 @@ export default function MainPage() {
                     <Box sx={{ flex: 1 }} />
                     <Box my={4} display="flex" justifyContent="center" sx={{ flex: 5 }}>
                         <Typography variant="h2">Pet Mate</Typography>
-
                     </Box>
+                    {isLogin ? (
+                        <Box sx={{ flex: 1 }} />
+                    ) : (
+                        <Button variant='text' onClick={handleSignInClick} sx={{ flex: 1 }}>
+                            로그인
+                        </Button>
+                    )}
 
-                    <Button variant='text' onClick={handleSignInClick} sx={{ flex: 1 }}>
-                        로그인
-                    </Button>
+
                 </Toolbar>
             </AppBar>
 
@@ -82,29 +90,29 @@ export default function MainPage() {
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                 />
-                <Button variant="contained" onClick={write} sx={{ fontSize: '14px'}}>
+                <Button variant="contained" onClick={write} sx={{ fontSize: '14px' }}>
                     <Typography variant='h5'>모집하기</Typography>
                 </Button>
             </Box>
 
             <Stack direction="column" spacing={2}>
                 {filteredPosts.map((post) => (
-                    <Post post={post} key={post.id} addComment={addComment} />
+                    <Post post={post} key={post.id} addComment={addComment} isLogin = {isLogin} />
                 ))}
 
 
             </Stack>
             <Box minHeight='10vh'></Box>
-        </Container>
+        </Container >
     );
 }
 
-function Post({ post, addComment }) {
+function Post({ post, addComment,isLogin}) {
     const [commentText, setCommentText] = useState("");
     const [showComments, setShowComments] = useState(false);
     const HandleAddButton = (postId) => {
         const newComment = { userId: 'User4', content: commentText };
-        
+
         addComment(postId, newComment);
 
         setCommentText("");
@@ -114,8 +122,8 @@ function Post({ post, addComment }) {
     return (
         <Box key={post.id} p={1} border={1} borderRadius='borderRadius' borderColor="#ddd">
             <Box display="flex" justifyContent="space-between" alignItems="center">
-                <Typography variant='subtitle2' sx={{flex: 1, textAlign: 'left' }}>{post.UserName}</Typography>
-                <Typography variant='h5' sx={{ wordWrap: 'break-word', flex: 5, textAlign:'center'}}>{post.title}</Typography>
+                <Typography variant='subtitle2' sx={{ flex: 1, textAlign: 'left' }}>{post.UserName}</Typography>
+                <Typography variant='h5' sx={{ wordWrap: 'break-word', flex: 5, textAlign: 'center' }}>{post.title}</Typography>
                 <Box sx={{ flex: 1 }} />
             </Box>
             <Divider />
@@ -134,7 +142,7 @@ function Post({ post, addComment }) {
             <Box display="flex" p={1}>
                 <Box flexGrow={1} display="flex" justifyContent="center">
                     <Button variant="text" onClick={() => setShowComments(!showComments)}>
-                        {showComments ? `댓글 숨기기` : `댓글(${post.comments.length})`}
+                        {showComments ? `댓글 숨기기` : `댓글(${post.comments?.length})`}
                     </Button>
                 </Box>
 
@@ -148,7 +156,8 @@ function Post({ post, addComment }) {
                             <Typography sx={{ wordWrap: 'break-word' }} variant='body2' mt={1} mb={2}>{comment.content}</Typography>
                         </React.Fragment>
                     ))}
-                    <Box display="flex" alignItems="flex-start" mt={2}>
+                    {isLogin && (
+                        <Box display="flex" alignItems="flex-start" mt={2}>
                         <TextField
                             label="댓글 달기"
                             variant="outlined"
@@ -170,6 +179,8 @@ function Post({ post, addComment }) {
                             등록
                         </Button>
                     </Box>
+                    )}
+                    
                 </>
             )}
         </Box>
