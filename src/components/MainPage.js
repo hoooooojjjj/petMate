@@ -1,99 +1,26 @@
 import React, { useState, useEffect } from "react";
 import { Container, Box, Typography, Button, Divider, Stack, TextField, AppBar, Toolbar } from '@mui/material';
 import { useNavigate } from "react-router-dom";
-import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, addDoc, onSnapshot } from 'firebase/firestore';
-
-
-const firebaseConfig = {
-    apiKey: process.env.REACT_APP_API_KEY,
-    authDomain: process.env.REACT_APP_AUTH_DOMAIN,
-    projectId: process.env.REACT_APP_PROJECT_ID,
-    storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
-    messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
-    appId: process.env.REACT_APP_APP_ID,
-};
-
-const firebaseApp = initializeApp(firebaseConfig);
-const db = getFirestore(firebaseApp);
-
-
-
-
+import {collection,query, where, setDoc,getDocs,arrayUnion,onSnapshot   } from 'firebase/firestore';
+import { DB } from "./Myfirebase.js";
 
 export default function MainPage() {
     const navigate = useNavigate();
-
-
+    const [posts,setPosts] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [filteredPosts, setFilteredPosts] = useState([]);
 
-    const write = () => {
-        navigate("/InsertForm");
-    };
-
-    const handleSignInClick = () => {
-        navigate("/Signin");
-    };
-
-    const [posts, setPosts] = useState([
-        { id: 1, UserName: "User1", title: '서울숲 산책하기', content: '날짜/시간, 장소, 인원', comments: [{ userId: 'User2', content: '참석합니다~' }, { userId: 'User3', content: '저두요!' }] },
-        { id: 2, UserName: "User2", title: '애견카페 같이가요~', content: '날짜/시간, 장소, 인원', comments: [] },
-        { id: 3, UserName: "User3", title: '망원 한강공원 산책하기', content: '날짜/시간, 장소, 인원', comments: [] },
-    ]);
-
-    /* useEffect(() => {
-        const fetchPosts = async () => {
-          try {
-            const postsCollection = collection(db, "posts");
-            const unsubscribe = onSnapshot(postsCollection, (snapshot) => {
-              const postsData = [];
-              snapshot.forEach((doc) => {
-                postsData.push({ id: doc.id, ...doc.data() });
-              });
-              setPosts(postsData);
-            });
-            if (unsubscribe && typeof unsubscribe === "function") {
-                return () => unsubscribe();
-              }
-            } catch (error) {
-              console.error("Error fetching posts: ", error);
-            }
-          }; 
-      
-        
-    
-        const unsubscribe = fetchPosts();
-
-        return () => {
-            if (unsubscribe) {
-              unsubscribe();
-            }
-          };
-        }, []);
-
-        useEffect(() => {
-            setFilteredPosts(
-              posts.filter((post) =>
-                post.content.toLowerCase().includes(searchTerm.toLowerCase())
-              )
-            );
-          }, [searchTerm, posts]);  */
-
-    const addComment = (postId, comment) => {
-        let newPosts = posts.map((post) => {
-
-            if (post.id === postId) {
-                let newPost = { ...post };
-                newPost.comments = [...newPost.comments, comment];
-                return newPost;
-            } else {
-                return post;
-            }
+    useEffect(() => {
+        const postsCollection = collection(DB,"posts");
+        const unsubscribe = onSnapshot(postsCollection,(snapshot) => {
+            let postData = snapshot.docs.map(doc => ({...doc.data(), firestoreId: doc.id}));
+            setPosts(postData);
         });
-        setPosts(newPosts);
-    }
 
+        return () => unsubscribe();
+    }, []);
+
+        
     /* eslint-disable */
     useEffect(() => {
         setFilteredPosts(
@@ -102,8 +29,30 @@ export default function MainPage() {
             )
         );
     }, [searchTerm, posts]);
+    
+    const write = () => {
+        navigate("/InsertForm");
+    };
 
+    const handleSignInClick = async () => {
+        navigate("/SignIn");
+    };
 
+    const addComment = async (postId, comment) => {
+
+        const postsCollection = collection(DB, "posts");
+        const q = query(postsCollection, where("id", "==", postId));
+        const querySnapshot = await getDocs(q);
+        if (!querySnapshot.empty) {
+            const postDoc = querySnapshot.docs[0];
+            
+            await setDoc(postDoc.ref, {
+                comments: arrayUnion(comment)
+            }, { merge: true });
+        } else {
+            console.log(`No document found with id: ${postId}`);
+        }
+    }
 
 
     return (
@@ -112,30 +61,30 @@ export default function MainPage() {
             <AppBar position="static" elevation={0} color="inherit" >
 
                 <Toolbar sx={{ justifyContent: 'space-between' }}>
-                    <Box my={4} display="flex" justifyContent="center">
+                    <Box sx={{ flex: 1 }} />
+                    <Box my={4} display="flex" justifyContent="center" sx={{ flex: 5 }}>
                         <Typography variant="h2">Pet Mate</Typography>
-                        <Button variant="contained" onClick={write} sx={{ fontSize: '14px', padding: '14px', height: '50px', marginTop: '10px', marginLeft: '20px' }}>
-                            <Typography variant='h5'>모집하기</Typography>
-                        </Button>
+
                     </Box>
 
-                    <Button variant='text' onClick={handleSignInClick}>
+                    <Button variant='text' onClick={handleSignInClick} sx={{ flex: 1 }}>
                         로그인
                     </Button>
                 </Toolbar>
             </AppBar>
 
-
-            <Box display="flex" justifyContent="center" mb={2}>
+            <Box display="flex" justifyContent="space-between" mb={2}>
 
                 <TextField
-                    label='검색하기'
+                    label='검색어를 입력해주세요'
                     variant='outlined'
-                    sx={{ width: '50%', textAlign: 'center' }}
+                    sx={{ width: '70%', textAlign: 'center' }}
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                 />
-
+                <Button variant="contained" onClick={write} sx={{ fontSize: '14px'}}>
+                    <Typography variant='h5'>모집하기</Typography>
+                </Button>
             </Box>
 
             <Stack direction="column" spacing={2}>
@@ -153,35 +102,10 @@ export default function MainPage() {
 function Post({ post, addComment }) {
     const [commentText, setCommentText] = useState("");
     const [showComments, setShowComments] = useState(false);
-
     const HandleAddButton = (postId) => {
-
-        const newComment = {
-            userId: "아이디",
-            content: commentText,
-        };
-
+        const newComment = { userId: 'User4', content: commentText };
+        
         addComment(postId, newComment);
-
-        // TODO: 여기서 댓글을 DB에 전송하는 API 호출 또는 다른 작업을 수행하세요.
-
-        const HandleAddButton = async (postId) => {
-            const newComment = {
-                userId: "아이디",
-                content: commentText,
-
-            };
-
-            try {
-                const docRef = await addDoc(collection(db, "comments"), newComment);
-
-                addComment(postId, { userId: newComment.userId, content: newComment.content });
-
-                setCommentText("");
-            } catch (error) {
-                console.error("Error adding comment: ", error);
-            }
-        };
 
         setCommentText("");
     };
@@ -190,9 +114,11 @@ function Post({ post, addComment }) {
     return (
         <Box key={post.id} p={1} border={1} borderRadius='borderRadius' borderColor="#ddd">
             <Box display="flex" justifyContent="space-between" alignItems="center">
-                <Typography variant='h6' sx={{ wordWrap: 'break-word', flex: 1 }}>{post.title}</Typography>
-                <Typography variant='subtitle2' sx={{ wordWrap: 'break-word', flex: 1, textAlign: 'right' }}>{post.UserName}</Typography>
+                <Typography variant='subtitle2' sx={{flex: 1, textAlign: 'left' }}>{post.UserName}</Typography>
+                <Typography variant='h5' sx={{ wordWrap: 'break-word', flex: 5, textAlign:'center'}}>{post.title}</Typography>
+                <Box sx={{ flex: 1 }} />
             </Box>
+            <Divider />
             <Box minHeight="15vh" sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <Typography sx={{ wordWrap: 'break-word', textAlign: 'center' }}>
                     {post.content.split(', ').map((item, index) => (
