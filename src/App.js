@@ -16,18 +16,17 @@ function App() {
   const [isLogin, setisLogin] = useState(false);
 
   // 컴포넌트가 마운트(첫 렌더링)됐을 때 사용자가 로그인되어 있는지 확인
-  // useEffect(() => {
-  //   onAuthStateChanged(auth, (user) => {
-  //     if (user) {
-  //       setuser((args) => user);
-  //       console.log(user); // -> 로그인 되어 있는 유저에 대한 정보가 들어있음(user.displayName => 유저 닉네임)
-  //       setisLogin(true); // 로그인됨.
-  //     } else {
-  //       setisLogin(false); // 로그인 안됨.
-  //     }
-  //   });
-  // }, []);
-  
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setuser((args) => user);
+        console.log(user); // -> 로그인 되어 있는 유저에 대한 정보가 들어있음(user.displayName => 유저 닉네임)
+        setisLogin(true); // 로그인됨.
+      } else {
+        setisLogin(false); // 로그인 안됨.
+      }
+    });
+  }, []);
   return (
     <Router>
       <Routes>

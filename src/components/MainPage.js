@@ -2,24 +2,10 @@ import React, { useState, useEffect } from "react";
 import { Container, Box, Typography, Button, Divider, Stack, TextField, AppBar, Toolbar } from '@mui/material';
 import { useNavigate } from "react-router-dom";
 import { collection, query, where, setDoc, getDocs, arrayUnion, onSnapshot } from 'firebase/firestore';
-import { DB } from "../Myfirebase.js";
+import { DB,auth } from "../Myfirebase.js";
+import { signOut } from "firebase/auth";
 
-export default function MainPage({user, isLogin}) {
-    
-    
-    const hardcodedPost = {
-        id: 1,
-        UserName: '홍길동',
-        title: '제목',
-        content: 'blahblahblahblahblahblah',
-        place: '서울시',
-        time: '12시',
-        people: '4명',
-        comments: [],
-      };
-    
-    
-    
+export default function MainPage({user, isLogin}) {    
     
     const navigate = useNavigate();
     const [posts, setPosts] = useState([]);
@@ -58,6 +44,9 @@ export default function MainPage({user, isLogin}) {
         navigate("/SignIn");
     };
 
+    const handleSignOutClick = async () => {
+        signOut(auth);
+    };
     const addComment = async (postId, comment) => {
 
         const postsCollection = collection(DB, "posts");
@@ -86,7 +75,9 @@ export default function MainPage({user, isLogin}) {
                         <Typography variant="h2">Pet Mate</Typography>
                     </Box>
                     {isLogin ? (
-                        <Box sx={{ flex: 1 }} />
+                        <Button variant='text' onClick={handleSignOutClick} sx={{ flex: 1 }}>
+                                              로그아웃
+                        </Button>
                     ) : (
                         <Button variant='text' onClick={handleSignInClick} sx={{ flex: 1 }}>
                             로그인
@@ -114,8 +105,7 @@ export default function MainPage({user, isLogin}) {
             <Stack direction="column" spacing={2}>
                 {filteredPosts.map((post) => (
 
-                    <Post post={hardcodedPost} addComment={addComment} isLogin={isLogin} />
-                   // <Post post={post} key={post.id} addComment={addComment} isLogin = {isLogin} />
+                   <Post post={post} key={post.id} addComment={addComment} user={user} isLogin = {isLogin} />
                 ))}
 
 
@@ -125,11 +115,11 @@ export default function MainPage({user, isLogin}) {
     );
 }
 
-function Post({ post, addComment,isLogin}) {
+function Post({ post, addComment,user,isLogin}) {
     const [commentText, setCommentText] = useState("");
     const [showComments, setShowComments] = useState(false);
     const HandleAddButton = (postId) => {
-        const newComment = { userId: 'User4', content: commentText };
+        const newComment = { userId: user.displayName, content: commentText };
 
         addComment(postId, newComment);
 
