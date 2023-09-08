@@ -5,6 +5,22 @@ import { collection, query, where, setDoc, getDocs, arrayUnion, onSnapshot } fro
 import { DB } from "../Myfirebase.js";
 
 export default function MainPage({user, isLogin}) {
+    
+    
+    const hardcodedPost = {
+        id: 1,
+        UserName: '홍길동',
+        title: '제목',
+        content: 'blahblahblahblahblahblah',
+        place: '서울시',
+        time: '12시',
+        people: '4명',
+        comments: [],
+      };
+    
+    
+    
+    
     const navigate = useNavigate();
     const [posts, setPosts] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
@@ -97,7 +113,9 @@ export default function MainPage({user, isLogin}) {
 
             <Stack direction="column" spacing={2}>
                 {filteredPosts.map((post) => (
-                    <Post post={post} key={post.id} addComment={addComment} isLogin = {isLogin} />
+
+                    <Post post={hardcodedPost} addComment={addComment} isLogin={isLogin} />
+                   // <Post post={post} key={post.id} addComment={addComment} isLogin = {isLogin} />
                 ))}
 
 
@@ -118,7 +136,6 @@ function Post({ post, addComment,isLogin}) {
         setCommentText("");
     };
 
-
     return (
         <Box key={post.id} p={1} border={1} borderRadius='borderRadius' borderColor="#ddd">
             <Box display="flex" justifyContent="space-between" alignItems="center">
@@ -137,6 +154,17 @@ function Post({ post, addComment,isLogin}) {
                     ))}
                 </Typography>
             </Box>
+            <Box minHeight="10vh" sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom:'10px' }}>
+                <Typography sx={{ wordWrap: 'break-word', textAlign: 'center' }}>
+                    {post.content.split(', ').map((item, index) => (
+                                  <React.Fragment key={index}>
+                                  장소: {post.place}<br />
+                                  시간: {post.time}<br />
+                                  모집인원: {post.people}
+                                </React.Fragment>
+                    ))}
+                </Typography>
+                    </Box> 
 
             <Divider />
             <Box display="flex" p={1}>
