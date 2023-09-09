@@ -5,6 +5,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import {db} from "../Myfirebase"
 import { collection, addDoc, getDocs } from "firebase/firestore";
+import KakaoMap from './kakao_map';
 
 
 const WritePage = ({ onInsert }) => {
@@ -39,28 +40,29 @@ const WritePage = ({ onInsert }) => {
             <div className="top_tv">글 작성 페이지</div>
         <div className="writePage">
 
-            <div className="title_tv">제목</div>
+            
             <input className="title" placeholder='제목을 입력하세요.' value={inputTitle} onChange={(event) => {
                 setInputTitle(event.target.value);
             }} />
-            <div className="content_tv">내용</div>
+            
             <input className="content" placeholder='내용을 입력하세요.' value={inputValue} onChange={(event) => {
                 setInputValue(event.target.value);
             }} />
-            <div className="place_tv">만남 장소</div>
+            
             
             <input className="place" placeholder='만남 장소를 입력하세요.' value={inputPlace} onChange={(event) => {
                 setInputPlace(event.target.value);
             }} />
-            <div className="time_tv">만남 일시
+            <div className="time_tv">만남 일시</div>
             <DatePicker
+            className="time"
             selected={startDate}
             onChange={(date) => setStartDate(date)}
             timeInputLabel="Time:"
             dateFormat="yyyy/MM/dd h:mm aa"
             showTimeInput
             />
-            </div>
+            
             
             <div className="maxNum_tv">최대 인원</div>
             <div className="maxNum_set">

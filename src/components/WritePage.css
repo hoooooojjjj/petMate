@@ -1,20 +1,18 @@
 .writePage {
-    margin: 50px auto;
+    margin: 50px 20px;
     padding: 20px;
-    width: 400px;
     height: 600px;
 
     display: block;
 
-    background-color: #ededed;
+    /* background-color: #ededed; */
     border-radius: 20px;
 }
 
 .top_tv {
     display: flex;
-    justify-content: center;
 
-    margin: 0px;
+    margin: 20px;
     font-size: 20px;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     font-weight: 700;
@@ -35,14 +33,13 @@
 
 .title {
     border-radius: 7px;
-    margin: 10px auto;
+    margin: 10px;
 
     display: flex;
-    align-items: center;
 
-    min-width: 300px;
+    min-width: 90%;
     min-height: 20px;
-    border: 1px solid #ededed;
+    border: 1px solid gray;
 }
 
 .title::placeholder{
@@ -65,15 +62,14 @@
 
 .content {
     border-radius: 7px;
-    margin: 10px auto;
+    margin: 10px;
 
     flex-direction: column;
     display: flex;
-    align-items: center;
     
-    min-width: 300px;
+    min-width: 90%;
     min-height: 100px;
-    border: 1px solid #ededed;
+    border: 1px solid gray;
 }
 
 .content::placeholder{
@@ -87,15 +83,14 @@
 
 .place {
     border-radius: 7px;
-    margin: 10px auto;
+    margin: 10px;
 
     flex-direction: column;
     display: flex;
-    align-items: center;
     
-    min-width: 300px;
+    min-width: 90%;
     min-height: 50px;
-    border: 1px solid #ededed;
+    border: 1px solid gray;
 }
 
 .place::placeholder{
@@ -108,11 +103,15 @@
 }
 
 .time_tv {
-    margin: 10px;
+    margin: 10px 10px 5px;
 }
 
-.DatePicker {
-    margin: 100px;
+.time {
+    margin: 0 10px;
+}
+
+.maxNum_tv {
+    margin: 15px 10px 0px;
 }
 
 .maxNum_set{
@@ -125,10 +124,10 @@
 
 
 .submit-btn {
-    margin: 20px;
+    margin: 20px 10px;
 
     display: flex;
-    align-items: flex-start;
+    align-items: flex-end;
 
     border: 1px solid black;
     border-radius: 2px;
