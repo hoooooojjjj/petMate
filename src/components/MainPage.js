@@ -13,7 +13,7 @@ export default function MainPage() {
 
     const write = () => {
         //글 작성 페이지로 이동
-        navigate("/InsertForm");
+        navigate("/WritePage");
     };
 
     //DB연결 필요

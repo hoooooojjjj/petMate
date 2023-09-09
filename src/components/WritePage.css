@@ -1,0 +1,138 @@
+.writePage {
+    margin: 50px auto;
+    padding: 20px;
+    width: 400px;
+    height: 600px;
+
+    display: block;
+
+    background-color: #ededed;
+    border-radius: 20px;
+}
+
+.top_tv {
+    display: flex;
+    justify-content: center;
+
+    margin: 0px;
+    font-size: 20px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-weight: 700;
+  }
+
+
+/* .title_tv {
+    display: flex;
+    align-items: center;
+    margin: 10px;
+
+    flex-direction: column;
+    font-size: 20px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-weight: 400;
+    color: gray;
+} */
+
+.title {
+    border-radius: 7px;
+    margin: 10px auto;
+
+    display: flex;
+    align-items: center;
+
+    min-width: 300px;
+    min-height: 20px;
+    border: 1px solid #ededed;
+}
+
+.title::placeholder{
+    font-size: 13px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-weight: 400;
+}
+
+/* .content_tv {
+    display: flex;
+    align-items: center;
+    margin: 10px;
+
+    flex-direction: column;
+    font-size: 20px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-weight: 400;
+    color: gray;
+} */
+
+.content {
+    border-radius: 7px;
+    margin: 10px auto;
+
+    flex-direction: column;
+    display: flex;
+    align-items: center;
+    
+    min-width: 300px;
+    min-height: 100px;
+    border: 1px solid #ededed;
+}
+
+.content::placeholder{
+    display: flex;
+    text-align: top;
+
+    font-size: 13px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-weight: 400;
+}
+
+.place {
+    border-radius: 7px;
+    margin: 10px auto;
+
+    flex-direction: column;
+    display: flex;
+    align-items: center;
+    
+    min-width: 300px;
+    min-height: 50px;
+    border: 1px solid #ededed;
+}
+
+.place::placeholder{
+    display: flex;
+    text-align: top;
+
+    font-size: 13px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-weight: 400;
+}
+
+.time_tv {
+    margin: 10px;
+}
+
+.DatePicker {
+    margin: 100px;
+}
+
+.maxNum_set{
+    display: flex;
+}
+
+.maxNum_set button {
+    margin: 10px;
+}
+
+
+.submit-btn {
+    margin: 20px;
+
+    display: flex;
+    align-items: flex-start;
+
+    border: 1px solid black;
+    border-radius: 2px;
+    background-color: white;
+    cursor: pointer;
+    padding: 8px 16px;
+}
