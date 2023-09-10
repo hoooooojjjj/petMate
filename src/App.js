@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import InsertForm from "./components/WriteForm.js";
+import WritePage from "./components/WritePage.js";
 import Signin from "./components/Signin.js";
 import Signup from "./components/Signup.js";
 import MainPage from "./components/MainPage.js";
@@ -27,14 +27,15 @@ function App() {
       }
     });
   }, []);
+  
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Signin />} />
+        <Route path="/" element={<MainPage user = {user} isLogin ={isLogin}/>} />
         <Route path="/signin" element={<Signin />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/MainPage" element={<MainPage />} />
-        <Route path="/InsertForm" element={<InsertForm />} />
+        <Route path="/MainPage"  element={<MainPage user = {user} isLogin ={isLogin}/>} />
+        <Route path="/WritePage" element={<WritePage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
