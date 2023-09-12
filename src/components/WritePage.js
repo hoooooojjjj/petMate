@@ -5,7 +5,6 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { db } from "../Myfirebase";
 import { collection, addDoc, getDocs } from "firebase/firestore";
-import KakaoMap from "./kakao_map";
 
 const WritePage = ({ onInsert }) => {
   const navigate = useNavigate();
@@ -24,7 +23,7 @@ const WritePage = ({ onInsert }) => {
     });
   };
 
-  useEffect(async () => {
+  useEffect(() => {
     getData();
   }, []);
 
@@ -35,6 +34,7 @@ const WritePage = ({ onInsert }) => {
   const submit = (event) => {
     addDoc(collection(db, "write_page"), {
       contents: { inputTitle, inputValue, inputPlace, startDate, maxNum },
+      comments: [],
     });
     //등록 확인
 

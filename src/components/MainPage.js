@@ -13,12 +13,10 @@ import {
 import { useNavigate } from "react-router-dom";
 import {
   collection,
-  query,
-  where,
   setDoc,
-  getDocs,
   arrayUnion,
   onSnapshot,
+  doc,
 } from "firebase/firestore";
 import { DB, auth } from "../Myfirebase.js";
 import { signOut } from "firebase/auth";
@@ -28,28 +26,6 @@ export default function MainPage({ user, isLogin }) {
   const [posts, setPosts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredPosts, setFilteredPosts] = useState([]);
-
-  useEffect(() => {
-    const postsCollection = collection(DB, "posts");
-    const unsubscribe = onSnapshot(postsCollection, (snapshot) => {
-      let postData = snapshot.docs.map((doc) => ({
-        ...doc.data(),
-        firestoreId: doc.id,
-      }));
-      setPosts(postData);
-    });
-
-    return () => unsubscribe();
-  }, []);
-
-  /* eslint-disable */
-  useEffect(() => {
-    setFilteredPosts(
-      posts.filter((post) =>
-        post.content.toLowerCase().includes(searchTerm.toLowerCase())
-      )
-    );
-  }, [searchTerm, posts]);
 
   const write = () => {
     if (!isLogin) {
@@ -66,23 +42,40 @@ export default function MainPage({ user, isLogin }) {
   const handleSignOutClick = async () => {
     signOut(auth);
   };
-  const addComment = async (postId, comment) => {
-    const postsCollection = collection(DB, "posts");
-    const q = query(postsCollection, where("id", "==", postId));
-    const querySnapshot = await getDocs(q);
-    if (!querySnapshot.empty) {
-      const postDoc = querySnapshot.docs[0];
 
-      await setDoc(
-        postDoc.ref,
-        {
-          comments: arrayUnion(comment),
-        },
-        { merge: true }
-      );
-    } else {
-      console.log(`No document found with id: ${postId}`);
-    }
+  useEffect(() => {
+    const postsCollection = collection(DB, "write_page");
+    const unsubscribe = onSnapshot(postsCollection, (snapshot) => {
+      let postData = snapshot.docs.map((doc) => ({
+        ...doc.data(),
+        firestoreId: doc.id,
+      }));
+      setPosts(postData);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  /* eslint-disable */
+  useEffect(() => {
+    setFilteredPosts(
+      posts.filter((post) =>
+        post.contents.inputTitle ? post.contents.inputTitle.toLowerCase().includes(searchTerm.toLowerCase()) : false
+      )
+    );
+  }, [searchTerm, posts]);
+
+
+  const addComment = async (firestoreId, comment) => {
+    const postDocRef = doc(DB, "write_page", firestoreId);
+    
+    await setDoc(
+      postDocRef,
+      {
+        comments: arrayUnion(comment),
+      },
+      { merge: true }
+    );
   };
 
   return (
@@ -126,7 +119,7 @@ export default function MainPage({ user, isLogin }) {
         {filteredPosts.map((post) => (
           <Post
             post={post}
-            key={post.id}
+            key={post.firestoreId}
             addComment={addComment}
             user={user}
             isLogin={isLogin}
@@ -141,6 +134,7 @@ export default function MainPage({ user, isLogin }) {
 function Post({ post, addComment, user, isLogin }) {
   const [commentText, setCommentText] = useState("");
   const [showComments, setShowComments] = useState(false);
+
   const HandleAddButton = (postId) => {
     const newComment = { userId: user.displayName, content: commentText };
 
@@ -151,7 +145,7 @@ function Post({ post, addComment, user, isLogin }) {
 
   return (
     <Box
-      key={post.id}
+      key={post.firestoreId}
       p={1}
       border={1}
       borderRadius="borderRadius"
@@ -165,7 +159,7 @@ function Post({ post, addComment, user, isLogin }) {
           variant="h5"
           sx={{ wordWrap: "break-word", flex: 5, textAlign: "center" }}
         >
-          {post.title}
+          {post.contents.inputTitle}
         </Typography>
         <Box sx={{ flex: 1 }} />
       </Box>
@@ -175,12 +169,7 @@ function Post({ post, addComment, user, isLogin }) {
         sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
       >
         <Typography sx={{ wordWrap: "break-word", textAlign: "center" }}>
-          {post.content.split(", ").map((item, index) => (
-            <React.Fragment key={index}>
-              {item}
-              <br />
-            </React.Fragment>
-          ))}
+          {post.contents.inputValue}
         </Typography>
       </Box>
       <Box
@@ -193,17 +182,14 @@ function Post({ post, addComment, user, isLogin }) {
         }}
       >
         <Typography sx={{ wordWrap: "break-word", textAlign: "center" }}>
-          {post.content.split(", ").map((item, index) => (
-            <React.Fragment key={index}>
-              장소: {post.place}
+              장소: {post.contents.inputPlace}
               <br />
-              시간: {post.time}
+              {/*시간: {post.contents.time}*/}
               <br />
-              모집인원: {post.people}
-            </React.Fragment>
-          ))}
+              모집인원: {post.contents.maxNum}
         </Typography>
       </Box>
+
 
       <Divider />
       <Box display="flex" p={1}>
@@ -250,7 +236,7 @@ function Post({ post, addComment, user, isLogin }) {
                 variant="contained"
                 color="primary"
                 onClick={() => {
-                  HandleAddButton(post.id);
+                  HandleAddButton(post.firestoreId);
                 }}
                 style={{ marginLeft: 10 }}
               >
