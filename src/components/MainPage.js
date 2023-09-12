@@ -17,6 +17,9 @@ import {
   arrayUnion,
   onSnapshot,
   doc,
+  query,
+  getDocs,
+  orderBy,
 } from "firebase/firestore";
 import { DB, auth } from "../Myfirebase.js";
 import { signOut } from "firebase/auth";
@@ -45,7 +48,12 @@ export default function MainPage({ user, isLogin }) {
 
   useEffect(() => {
     const postsCollection = collection(DB, "write_page");
-    const unsubscribe = onSnapshot(postsCollection, (snapshot) => {
+    const queryData = query(
+      postsCollection,
+      orderBy("contents.startDate", "asc")
+    );
+    const unsubscribe = onSnapshot(queryData, (snapshot) => {
+      console.log(snapshot.docs);
       let postData = snapshot.docs.map((doc) => ({
         ...doc.data(),
         firestoreId: doc.id,
@@ -53,22 +61,25 @@ export default function MainPage({ user, isLogin }) {
       setPosts(postData);
     });
 
-    return () => unsubscribe();
+    return () => unsubscribe(); // 컴포넌트 언마운트 시 리스너 해제
   }, []);
 
   /* eslint-disable */
   useEffect(() => {
     setFilteredPosts(
       posts.filter((post) =>
-        post.contents.inputTitle ? post.contents.inputTitle.toLowerCase().includes(searchTerm.toLowerCase()) : false
+        post.contents.inputTitle
+          ? post.contents.inputTitle
+              .toLowerCase()
+              .includes(searchTerm.toLowerCase())
+          : false
       )
     );
   }, [searchTerm, posts]);
 
-
   const addComment = async (firestoreId, comment) => {
     const postDocRef = doc(DB, "write_page", firestoreId);
-    
+
     await setDoc(
       postDocRef,
       {
@@ -182,14 +193,13 @@ function Post({ post, addComment, user, isLogin }) {
         }}
       >
         <Typography sx={{ wordWrap: "break-word", textAlign: "center" }}>
-              장소: {post.contents.inputPlace}
-              <br />
-              {/*시간: {post.contents.time}*/}
-              <br />
-              모집인원: {post.contents.maxNum}
+          장소: {post.contents.inputPlace}
+          <br />
+          {/*시간: {post.contents.time}*/}
+          <br />
+          모집인원: {post.contents.maxNum}
         </Typography>
       </Box>
-
 
       <Divider />
       <Box display="flex" p={1}>
