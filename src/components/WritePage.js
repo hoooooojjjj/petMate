@@ -43,7 +43,7 @@ const WritePage = ({ onInsert }) => {
 
   return (
     <div className="top">
-      <div className="top_tv">글 작성 페이지</div>
+      <h2 className="top_tv">모집하기</h2>
       <div className="writePage">
         <input
           className="title"
