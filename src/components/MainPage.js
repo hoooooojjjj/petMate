@@ -195,7 +195,7 @@ function Post({ post, addComment, user, isLogin }) {
         <Typography sx={{ wordWrap: "break-word", textAlign: "center" }}>
           장소: {post.contents.inputPlace}
           <br />
-          {/*시간: {post.contents.time}*/}
+          시간 : {`${post.contents.startDate.toDate().getMonth() + 1}월 ${post.contents.startDate.toDate().getDate()}일 ${post.contents.startDate.toDate().getHours()}시`}
           <br />
           모집인원: {post.contents.maxNum}
         </Typography>
