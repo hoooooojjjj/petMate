@@ -9,6 +9,8 @@ import CurrentDate from './CurrentDate';
 import { useLocation } from "react-router";
 import KakaoMap from './kakao_map';
 
+// const MyContext = React.createContext();
+
 const WritePage = ({ onInsert }) => {
     const navigate = useNavigate();
     const [inputTitle, setInputTitle] = useState("");
@@ -23,6 +25,9 @@ const WritePage = ({ onInsert }) => {
     const handleReturnPlaceChange = (newReturnPlace) => {
         setReturnPlace(newReturnPlace);
     };
+
+    // const data = useContext(MyContext);
+    // console.log(data)
 
     const { state } = useLocation();
     // console.log(state);
@@ -40,12 +45,17 @@ const WritePage = ({ onInsert }) => {
     // useEffect(() => {
     //     getData();
     // }, []);
-  
+
+    // useEffect(async () => {
+    //     addDoc(collection(db, "write_page"), {contents: "데이터 저장 테스트"})
+    //   }, [])
+
     const submit = (event) => {
         addDoc(collection(db, "write_page"), {
             contents: { inputTitle, inputValue, inputPlace, startDate, maxNum, submitTime, userId, returnPlace },
             comments: [],
         })
+
 
         navigate("/MainPage");
     };
@@ -118,7 +128,8 @@ const WritePage = ({ onInsert }) => {
                 </button>
 
             </div>
-</div>
+
+        </div>
     );
 };
 
