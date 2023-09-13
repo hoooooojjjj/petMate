@@ -27,13 +27,14 @@ function App() {
       }
     });
   }, []);
+  
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Signin />} />
+        <Route path="/" element={<MainPage user = {user} isLogin ={isLogin}/>} />
         <Route path="/signin" element={<Signin />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/MainPage" element={<MainPage />} />
+        <Route path="/MainPage"  element={<MainPage user = {user} isLogin ={isLogin}/>} />
         <Route path="/WritePage" element={<WritePage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
