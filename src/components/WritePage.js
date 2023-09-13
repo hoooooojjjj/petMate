@@ -7,7 +7,9 @@ import { db } from "../Myfirebase";
 import { collection, addDoc, getDocs } from "firebase/firestore";
 import CurrentDate from './CurrentDate';
 import { useLocation } from "react-router";
-// import KakaoMap from './kakao_map';
+import KakaoMap from './kakao_map';
+
+// const MyContext = React.createContext();
 
 const WritePage = ({ onInsert }) => {
     const navigate = useNavigate();
@@ -18,7 +20,8 @@ const WritePage = ({ onInsert }) => {
     const [startDate, setStartDate] = useState(new Date());
     const [submitTime, setSubmitTime] = useState(CurrentDate);
 
-
+    // const data = useContext(MyContext);
+    // console.log(data)
 
     const { state } = useLocation();
     // console.log(state);
@@ -26,17 +29,16 @@ const WritePage = ({ onInsert }) => {
 
 
     // destroy 오류 해결
-    const getData = async () => {
-        // db 뒤에 "techInfo"는 정보를 가져올 컬렉션 이름이다.
-        const query = await getDocs(collection(db, "write_page"));
-        query.forEach((doc) => {
-            console.log(doc.content, doc.data());
-        });
-    };
+    // const getData = async () => {
+    //     const query = await getDocs(collection(db, "write_page"));
+    //     query.forEach((doc) => {
+    //         console.log(doc.content, doc.data());
+    //     });
+    // };
 
-    useEffect(() => {
-        getData();
-    }, []);
+    // useEffect(() => {
+    //     getData();
+    // }, []);
 
     // useEffect(async () => {
     //     addDoc(collection(db, "write_page"), {contents: "데이터 저장 테스트"})
@@ -77,12 +79,13 @@ const WritePage = ({ onInsert }) => {
 
                 <input
                     className="place"
-                    placeholder="만남 장소를 입력하세요."
+                    placeholder="자세한 만남 장소를 입력하세요."
                     value={inputPlace}
                     onChange={(event) => {
                         setInputPlace(event.target.value);
                     }}
                 />
+                <KakaoMap />
 
                 <div className="time_tv">만남 일시</div>
                 <DatePicker
