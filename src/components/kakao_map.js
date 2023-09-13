@@ -3,13 +3,9 @@ import WritePage from './WritePage';
 import { db } from "../Myfirebase";
 import { collection, addDoc, getDocs } from "firebase/firestore";
 
-
-
 const { kakao } = window;
 
-// const MyContext = React.createContext();
-
-const KakaoMap = () => {
+const KakaoMap = ({onReturnPlaceChange}) => {
   const [place, setPlace] = useState("");
   const [returnPlace, setReturnPlace] = useState("ㅜㅜ");
 
@@ -56,21 +52,24 @@ const KakaoMap = () => {
         );
         infowindow.open(map, marker);
         setReturnPlace(place.place_name)
-        addDoc(collection(db, "write_page"), {
-          contents: { returnPlace },
-          comments: [],
-      });
+        onReturnPlaceChange(place.place_name)
         console.log(place.place_name)
       });
 
     }
-  }, [place]);
+  }, [place, onReturnPlaceChange]);
+
+  const submit = (event) => {
+    addDoc(collection(db, "write_page"), {
+      contents: { returnPlace },
+      comments: [],
+    });
+    //등록 확인
+
+  };
 
   return (
     <div className="map_wrap">
-      {/* <MyContext.Provider value={returnPlace}>
-        <WritePage />
-      </MyContext.Provider> */}
       <div style={{ margin: 10 }}>장소: {returnPlace}</div>
 
       <input
@@ -86,6 +85,12 @@ const KakaoMap = () => {
         }}
       />
       <p>장소 클릭 시 해당 장소가 저장됩니다.</p>
+      <button className="submit-btn" type="submit"
+                    onClick={(event) => {
+                        submit(event);
+                    }}>
+                    장소 저장
+                </button>
 
       <div
         id="map"

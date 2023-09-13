@@ -20,6 +20,12 @@ const WritePage = ({ onInsert }) => {
     const [startDate, setStartDate] = useState(new Date());
     const [submitTime, setSubmitTime] = useState(CurrentDate);
 
+    const [returnPlace, setReturnPlace] = useState("");
+
+    const handleReturnPlaceChange = (newReturnPlace) => {
+        setReturnPlace(newReturnPlace);
+    };
+
     // const data = useContext(MyContext);
     // console.log(data)
 
@@ -46,9 +52,10 @@ const WritePage = ({ onInsert }) => {
 
     const submit = (event) => {
         addDoc(collection(db, "write_page"), {
-            contents: { inputTitle, inputValue, inputPlace, startDate, maxNum, submitTime, userId },
+            contents: { inputTitle, inputValue, inputPlace, startDate, maxNum, submitTime, userId, returnPlace },
             comments: [],
-        });
+        })
+
         //등록 확인
 
         navigate("/MainPage");
@@ -85,7 +92,7 @@ const WritePage = ({ onInsert }) => {
                         setInputPlace(event.target.value);
                     }}
                 />
-                <KakaoMap />
+                <KakaoMap onReturnPlaceChange={handleReturnPlaceChange} />
 
                 <div className="time_tv">만남 일시</div>
                 <DatePicker
