@@ -30,8 +30,15 @@ const WritePage = ({ onInsert }) => {
     // console.log(data)
 
     const { state } = useLocation();
+    const [userId, setUserId] = useState("");
     // console.log(state);
-    const userId = state;
+    if (state === null) {
+        window.alert("재로그인이 필요합니다.");
+        navigate("/signin");
+
+      } else {
+        setUserId(state);
+      }
 
 
     // destroy 오류 해결
