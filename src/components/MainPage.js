@@ -11,6 +11,8 @@ import {
   Toolbar,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router";
+
 import {
   collection,
   setDoc,
@@ -29,13 +31,17 @@ export default function MainPage({ user, isLogin }) {
   const [posts, setPosts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredPosts, setFilteredPosts] = useState([]);
+  
+  const { state } = useLocation();
+    // console.log(state);
+    const userId = state;
 
   const write = () => {
     if (!isLogin) {
       alert("로그인이 필요합니다.");
       return;
     }
-    navigate("/WritePage");
+        navigate("/WritePage", { state: userId});
   };
 
   const handleSignInClick = async () => {
