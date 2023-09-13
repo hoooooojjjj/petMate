@@ -1,12 +1,12 @@
 import React, { useState, useCallback, useEffect } from "react";
-import './WritePage.css';
-import { useNavigate  } from "react-router-dom";
+import "./WritePage.css";
+import { useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import {db} from "../Myfirebase"
+import { db } from "../Myfirebase";
 import { collection, addDoc, getDocs } from "firebase/firestore";
+import CurrentDate from './CurrentDate';
 import KakaoMap from './kakao_map';
-
 
 const WritePage = ({ onInsert }) => {
     const navigate = useNavigate();
@@ -15,75 +15,105 @@ const WritePage = ({ onInsert }) => {
     const [inputPlace, setInputPlace] = useState("");
     const [maxNum, setMaxNum] = useState(0);
     const [startDate, setStartDate] = useState(new Date());
+    const [submitTime, setSubmitTime] = useState(CurrentDate);
 
-    useEffect(async () => {
+    // destroy 오류 해결
+    const getData = async () => {
         // db 뒤에 "techInfo"는 정보를 가져올 컬렉션 이름이다.
-        const query = await getDocs(collection(db, "write_page")); 
+        const query = await getDocs(collection(db, "write_page"));
         query.forEach((doc) => {
-          console.log(doc.content, doc.data())
+            console.log(doc.content, doc.data());
         });
-      }, [])
+    };
+
+    useEffect(() => {
+        getData();
+    }, []);
 
     // useEffect(async () => {
     //     addDoc(collection(db, "write_page"), {contents: "데이터 저장 테스트"})
     //   }, [])
 
     const submit = (event) => {
-        addDoc(collection(db, "write_page"), {contents: {inputTitle, inputValue, inputPlace, startDate, maxNum}})
+        addDoc(collection(db, "write_page"), {
+            contents: { inputTitle, inputValue, inputPlace, startDate, maxNum, submitTime },
+            comments: [],
+        });
         //등록 확인
 
         navigate("/MainPage");
-    }
+    };
 
     return (
         <div className="top">
-            <div className="top_tv">글 작성 페이지</div>
-        <div className="writePage">
+            <h2 className="top_tv">모집하기</h2>
+            <div className="writePage">
+                <input
+                    className="title"
+                    placeholder="제목을 입력하세요."
+                    value={inputTitle}
+                    onChange={(event) => {
+                        setInputTitle(event.target.value);
+                    }}
+                />
 
-            
-            <input className="title" placeholder='제목을 입력하세요.' value={inputTitle} onChange={(event) => {
-                setInputTitle(event.target.value);
-            }} />
-            
-            <input className="content" placeholder='내용을 입력하세요.' value={inputValue} onChange={(event) => {
-                setInputValue(event.target.value);
-            }} />
-            
-            
-            <input className="place" placeholder='만남 장소를 입력하세요.' value={inputPlace} onChange={(event) => {
-                setInputPlace(event.target.value);
-            }} />
-            <div className="time_tv">만남 일시</div>
-            <DatePicker
-            className="time"
-            selected={startDate}
-            onChange={(date) => setStartDate(date)}
-            timeInputLabel="Time:"
-            dateFormat="yyyy/MM/dd h:mm aa"
-            showTimeInput
-            />
-            
-            
-            <div className="maxNum_tv">최대 인원</div>
-            <div className="maxNum_set">
-                <button className="maxNum_subtract" onClick={(event)=> {
-                setMaxNum(maxNum -1)
-                }} >-</button>
-                <p value={maxNum}>{maxNum}</p>
-            <button className="maxNum_add" onClick={(event)=> {
-                setMaxNum(maxNum +1)
-                }} >+</button>
-            </div>
-            
-            <button className="submit-btn" type="submit" onClick={(event)=>{submit(event)}} >등록</button>
+                <input
+                    className="content"
+                    placeholder="내용을 입력하세요."
+                    value={inputValue}
+                    onChange={(event) => {
+                        setInputValue(event.target.value);
+                    }}
+                />
+
+                <input
+                    className="place"
+                    placeholder="만남 장소를 입력하세요."
+                    value={inputPlace}
+                    onChange={(event) => {
+                        setInputPlace(event.target.value);
+                    }}
+                />
+                <KakaoMap/>
+
+                <div className="time_tv">만남 일시</div>
+                <DatePicker
+                    className="time"
+                    selected={startDate}
+                    onChange={(date) => setStartDate(date)}
+                    timeInputLabel="Time:"
+                    dateFormat="yyyy/MM/dd h:mm aa"
+                    showTimeInput
+                />
+
+                <div className="maxNum_tv">최대 인원</div>
+                <div className="maxNum_set">
+                    <button className="maxNum_subtract"
+                        onClick={(event) => {
+                            setMaxNum(maxNum - 1);
+                        }}>
+                        -
+                    </button>
+                    <p value={maxNum}>{maxNum}</p>
+                    <button className="maxNum_add"
+                        onClick={(event) => {
+                            setMaxNum(maxNum + 1);
+                        }}>
+                        +
+                    </button>
+                </div>
+
+                <button className="submit-btn" type="submit"
+                    onClick={(event) => {
+                        submit(event);
+                    }}>
+                    등록
+                </button>
+
             </div>
 
         </div>
-        
-        
-        
-    )
-
-}
+    );
+};
 
 export default WritePage;
