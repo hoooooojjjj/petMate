@@ -37,7 +37,7 @@ export default function Signin() {
     signInWithEmailAndPassword(auth, signUp.email, signUp.password)
       .then((userCredential) => {
         // Signed in
-        navigate("/MainPage");
+        navigate("/MainPage", { state:  signUp.email});
       })
       .catch((error) => {});
   };

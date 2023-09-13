@@ -3,6 +3,7 @@ import { Container, Box, Typography, Button, Divider, Stack, TextField } from '@
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import CommentIcon from '@mui/icons-material/Comment';
 import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router";
 
 export default function MainPage() {
     const navigate = useNavigate();
@@ -11,9 +12,15 @@ export default function MainPage() {
     const [searchTerm, setSearchTerm] = useState("");
     const [filteredPosts, setFilteredPosts] = useState([]);
 
+
+    const { state } = useLocation();
+    // console.log(state);
+    const userId = state;
+
+
     const write = () => {
         //글 작성 페이지로 이동
-        navigate("/WritePage");
+        navigate("/WritePage", { state: userId});
     };
 
     //DB연결 필요

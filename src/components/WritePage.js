@@ -6,7 +6,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import { db } from "../Myfirebase";
 import { collection, addDoc, getDocs } from "firebase/firestore";
 import CurrentDate from './CurrentDate';
-import KakaoMap from './kakao_map';
+import { useLocation } from "react-router";
+// import KakaoMap from './kakao_map';
 
 const WritePage = ({ onInsert }) => {
     const navigate = useNavigate();
@@ -16,6 +17,13 @@ const WritePage = ({ onInsert }) => {
     const [maxNum, setMaxNum] = useState(0);
     const [startDate, setStartDate] = useState(new Date());
     const [submitTime, setSubmitTime] = useState(CurrentDate);
+
+
+
+    const { state } = useLocation();
+    // console.log(state);
+    const userId = state;
+
 
     // destroy 오류 해결
     const getData = async () => {
@@ -36,7 +44,7 @@ const WritePage = ({ onInsert }) => {
 
     const submit = (event) => {
         addDoc(collection(db, "write_page"), {
-            contents: { inputTitle, inputValue, inputPlace, startDate, maxNum, submitTime },
+            contents: { inputTitle, inputValue, inputPlace, startDate, maxNum, submitTime, userId },
             comments: [],
         });
         //등록 확인
@@ -47,6 +55,7 @@ const WritePage = ({ onInsert }) => {
     return (
         <div className="top">
             <h2 className="top_tv">모집하기</h2>
+
             <div className="writePage">
                 <input
                     className="title"
@@ -74,7 +83,6 @@ const WritePage = ({ onInsert }) => {
                         setInputPlace(event.target.value);
                     }}
                 />
-                <KakaoMap/>
 
                 <div className="time_tv">만남 일시</div>
                 <DatePicker
