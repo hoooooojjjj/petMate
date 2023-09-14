@@ -20,7 +20,6 @@ import {
   onSnapshot,
   doc,
   query,
-  getDocs,
   orderBy,
 } from "firebase/firestore";
 import { DB, auth } from "../Myfirebase.js";
@@ -81,11 +80,10 @@ export default function MainPage({ user, isLogin }) {
   useEffect(() => {
     setFilteredPosts(
       posts.filter((post) =>
-        post.contents.inputTitle
-          ? post.contents.inputTitle
-            .toLowerCase()
-            .includes(searchTerm.toLowerCase())
-          : false
+      post.contents.inputTitle?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      post.contents.inputValue?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      post.contents.returnPlace?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      post.contents.inputPlace?.toLowerCase().includes(searchTerm.toLowerCase())
       )
     );
   }, [searchTerm, posts]);
@@ -158,7 +156,8 @@ export default function MainPage({ user, isLogin }) {
 function Post({ post, addComment, user, isLogin }) {
   const [commentText, setCommentText] = useState("");
   const [showComments, setShowComments] = useState(false);
-
+  const [year, month, dayWithRest] = post.contents.submitTime.split('.');
+  const [day] = dayWithRest.split(' ');
   const HandleAddButton = (postId) => {
     const newComment = { userId: user.displayName, content: commentText };
 
@@ -176,17 +175,24 @@ function Post({ post, addComment, user, isLogin }) {
       borderColor="#ddd"
     >
       <Box display="flex" justifyContent="space-between" alignItems="center">
-        <Typography variant="subtitle2" sx={{ flex: 1, textAlign: "left" }}>
-          {post.UserName}
+        <Box sx = {{ flex: 2}}>
+        <Typography variant="subtitle2" sx={{ flex: 1, textAlign: "center" }}>
+          {post.contents.userId}
         </Typography>
+        </Box>
+
+        <Box sx = {{ flex: 6}}>
         <Typography
           variant="h5"
-          sx={{ wordWrap: "break-word", flex: 5, textAlign: "center" }}
+          sx={{ wordWrap: "break-word", textAlign: "center" }}
         >
           {post.contents.inputTitle}
         </Typography>
-        <Box sx={{ flex: 1 }} />
-      </Box>
+        </Box>
+        
+        <Box sx={{ flex: 2 }} />
+        </Box>
+
       <Divider />
       <Box
         minHeight="15vh"
@@ -206,8 +212,9 @@ function Post({ post, addComment, user, isLogin }) {
         }}
       >
         <Typography sx={{ wordWrap: "break-word", textAlign: "center" }}>
-          장소: {post.contents.inputPlace}
+          장소: {post.contents.returnPlace}
           <br />
+          <Typography sx={{ wordWrap: "break-word", textAlign: "center", fontSize: "15px" }}>{post.contents.inputPlace}</Typography>
           시간 : {`${post.contents.startDate.toDate().getMonth() + 1}월 ${post.contents.startDate.toDate().getDate()}일 ${post.contents.startDate.toDate().getHours()}시`}
           <br />
           모집인원: {post.contents.maxNum}
@@ -215,13 +222,17 @@ function Post({ post, addComment, user, isLogin }) {
       </Box>
 
       <Divider />
-      <Box display="flex" p={1}>
-        <Box flexGrow={1} display="flex" justifyContent="center">
-          <Button variant="text" onClick={() => setShowComments(!showComments)}>
-            {showComments ? `댓글 숨기기` : `댓글(${post.comments?.length})`}
-          </Button>
+
+      <Box display="flex" p={1} justifyContent="space-between" alignItems="center">
+        <Box sx={{ flex: 1 }} />
+        <Button variant="text" onClick={() => setShowComments(!showComments)}>
+          {showComments ? `댓글 숨기기` : `댓글(${post.comments?.length})`}
+        </Button>
+        <Box sx={{ flex: 1, textAlign: 'right' }}>
+          <Typography> {year}년 {month}월 {day}일 </Typography>
         </Box>
       </Box>
+
       {showComments && (
         <>
           {post.comments.map((comment, index) => (
