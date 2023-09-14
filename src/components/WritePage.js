@@ -97,6 +97,7 @@ const WritePage = ({ onInsert }) => {
           }}
         />
 
+        <KakaoMap onReturnPlaceChange={handleReturnPlaceChange} />
         <input
           className="place"
           placeholder="자세한 만남 장소를 입력하세요."
@@ -105,8 +106,6 @@ const WritePage = ({ onInsert }) => {
             setInputPlace(event.target.value);
           }}
         />
-        <KakaoMap onReturnPlaceChange={handleReturnPlaceChange} />
-
         <div className="time_tv">만남 일시</div>
         <DatePicker
           className="time"

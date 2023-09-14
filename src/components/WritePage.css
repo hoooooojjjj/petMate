@@ -10,13 +10,24 @@
 .top_tv {
     display: flex;
     margin: 20px 20px 20px 50px;
-    font-size: 20px;
+    font-size: 30px;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     font-weight: 700;
-    margin-left: 50px;
+    margin-left: 30px;
     margin-top: 50px;
   }
+.map_wrap{
+    margin-left: 15px;
+}
 
+#map{
+    width: 80%;
+    height: 300px;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid gray;
+    border-radius: 20px;
+}
 
 /* .title_tv {
     display: flex;
@@ -32,10 +43,10 @@
 
 .title {
     border-radius: 7px;
-    margin: 10px;
+    margin: 15px;
     display: flex;
     min-width: 90%;
-    min-height: 20px;
+    min-height: 40px;
     border: 1px solid gray;
 }
 
@@ -59,7 +70,7 @@
 
 .content {
     border-radius: 7px;
-    margin: 10px;
+    margin: 15px;
 
     flex-direction: column;
     display: flex;
@@ -86,7 +97,7 @@
     display: flex;
     
     min-width: 90%;
-    min-height: 50px;
+    min-height: 40px;
     border: 1px solid gray;
 }
 
@@ -124,8 +135,9 @@
 
 
 .submit-btn {
-    margin: 20px 10px;
-
+    margin-bottom: 10px;
+    margin-left: 10px;
+    margin-top: 10px;
     display: flex;
     align-items: flex-end;
 
@@ -134,4 +146,7 @@
     background-color: white;
     cursor: pointer;
     padding: 8px 16px;
+}
+.WritePage_btn{
+    display: flex;
 }

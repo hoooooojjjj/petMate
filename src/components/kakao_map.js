@@ -60,7 +60,7 @@ const KakaoMap = ({ onReturnPlaceChange }) => {
 
   return (
     <div className="map_wrap">
-      <div style={{ margin: 10 }}>장소: {returnPlace}</div>
+      <div>아래 칸에 장소를 먼저 검색해주세요</div>
 
       <input
         className="searchPlace"
@@ -74,17 +74,10 @@ const KakaoMap = ({ onReturnPlaceChange }) => {
           fontSize: "15px",
         }}
       />
-      <p>장소 클릭 시 해당 장소가 저장됩니다.</p>
+      <p>장소 검색 후 표시되는 장소 클릭 시 해당 장소가 아래 뜨게됩니다.</p>
+      <p>장소 : {returnPlace}</p>
 
-      <div
-        id="map"
-        style={{
-          width: "80%",
-          height: "300px",
-          position: "relative",
-          overflow: "hidden",
-        }}
-      ></div>
+      <div id="map"></div>
     </div>
   );
 };

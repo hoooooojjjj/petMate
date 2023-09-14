@@ -37,7 +37,6 @@ export default function MainPage({ user, isLogin }) {
   // console.log(user.displayName)
   // console.log(user)
 
-
   const write = () => {
     if (!isLogin) {
       alert("로그인이 필요합니다.");
@@ -79,11 +78,20 @@ export default function MainPage({ user, isLogin }) {
   /* eslint-disable */
   useEffect(() => {
     setFilteredPosts(
-      posts.filter((post) =>
-      post.contents.inputTitle?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      post.contents.inputValue?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      post.contents.returnPlace?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      post.contents.inputPlace?.toLowerCase().includes(searchTerm.toLowerCase())
+      posts.filter(
+        (post) =>
+          post.contents.inputTitle
+            ?.toLowerCase()
+            .includes(searchTerm.toLowerCase()) ||
+          post.contents.inputValue
+            ?.toLowerCase()
+            .includes(searchTerm.toLowerCase()) ||
+          post.contents.returnPlace
+            ?.toLowerCase()
+            .includes(searchTerm.toLowerCase()) ||
+          post.contents.inputPlace
+            ?.toLowerCase()
+            .includes(searchTerm.toLowerCase())
       )
     );
   }, [searchTerm, posts]);
@@ -156,8 +164,8 @@ export default function MainPage({ user, isLogin }) {
 function Post({ post, addComment, user, isLogin }) {
   const [commentText, setCommentText] = useState("");
   const [showComments, setShowComments] = useState(false);
-  const [year, month, dayWithRest] = post.contents.submitTime.split('.');
-  const [day] = dayWithRest.split(' ');
+  const [year, month, dayWithRest] = post.contents.submitTime.split(".");
+  const [day] = dayWithRest.split(" ");
   const HandleAddButton = (postId) => {
     const newComment = { userId: user.displayName, content: commentText };
 
@@ -175,23 +183,23 @@ function Post({ post, addComment, user, isLogin }) {
       borderColor="#ddd"
     >
       <Box display="flex" justifyContent="space-between" alignItems="center">
-        <Box sx = {{ flex: 2}}>
-        <Typography variant="subtitle2" sx={{ flex: 1, textAlign: "center" }}>
-          {post.contents.userId}
-        </Typography>
+        <Box sx={{ flex: 2 }}>
+          <Typography variant="subtitle2" sx={{ flex: 1, textAlign: "center" }}>
+            {post.contents.userId}
+          </Typography>
         </Box>
 
-        <Box sx = {{ flex: 6}}>
-        <Typography
-          variant="h5"
-          sx={{ wordWrap: "break-word", textAlign: "center" }}
-        >
-          {post.contents.inputTitle}
-        </Typography>
+        <Box sx={{ flex: 6 }}>
+          <Typography
+            variant="h5"
+            sx={{ wordWrap: "break-word", textAlign: "center" }}
+          >
+            {post.contents.inputTitle}
+          </Typography>
         </Box>
-        
+
         <Box sx={{ flex: 2 }} />
-        </Box>
+      </Box>
 
       <Divider />
       <Box
@@ -212,24 +220,46 @@ function Post({ post, addComment, user, isLogin }) {
         }}
       >
         <Typography sx={{ wordWrap: "break-word", textAlign: "center" }}>
-          장소: {post.contents.returnPlace}
+          장소: {post.contents.returnPlace + " "}
+          <Typography
+            sx={{
+              wordWrap: "break-word",
+              textAlign: "center",
+              fontSize: "15px",
+              display: "inline-block",
+            }}
+          >
+            {post.contents.inputPlace}
+          </Typography>
           <br />
-          <Typography sx={{ wordWrap: "break-word", textAlign: "center", fontSize: "15px" }}>{post.contents.inputPlace}</Typography>
-          시간 : {`${post.contents.startDate.toDate().getMonth() + 1}월 ${post.contents.startDate.toDate().getDate()}일 ${post.contents.startDate.toDate().getHours()}시`}
+          시간 :{" "}
+          {`${
+            post.contents.startDate.toDate().getMonth() + 1
+          }월 ${post.contents.startDate
+            .toDate()
+            .getDate()}일 ${post.contents.startDate.toDate().getHours()}시`}
           <br />
-          모집인원: {post.contents.maxNum}
+          모집인원: {post.contents.maxNum}명
         </Typography>
       </Box>
 
       <Divider />
 
-      <Box display="flex" p={1} justifyContent="space-between" alignItems="center">
+      <Box
+        display="flex"
+        p={1}
+        justifyContent="space-between"
+        alignItems="center"
+      >
         <Box sx={{ flex: 1 }} />
         <Button variant="text" onClick={() => setShowComments(!showComments)}>
           {showComments ? `댓글 숨기기` : `댓글(${post.comments?.length})`}
         </Button>
-        <Box sx={{ flex: 1, textAlign: 'right' }}>
-          <Typography> {year}년 {month}월 {day}일 </Typography>
+        <Box sx={{ flex: 1, textAlign: "right" }}>
+          <Typography>
+            {" "}
+            등록 날짜 : {year}년 {month}월 {day}일{" "}
+          </Typography>
         </Box>
       </Box>
 
