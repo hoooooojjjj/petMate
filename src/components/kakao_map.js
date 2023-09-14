@@ -89,4 +89,4 @@ const KakaoMap = ({ onReturnPlaceChange }) => {
   );
 };
 
-export default KakaoMap;
+export default React.memo(KakaoMap);
