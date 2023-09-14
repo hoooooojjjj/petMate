@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import WritePage from './WritePage';
+import WritePage from "./WritePage";
 import { db } from "../Myfirebase";
 import { collection, addDoc, getDocs } from "firebase/firestore";
 
 const { kakao } = window;
 
-const KakaoMap = ({onReturnPlaceChange}) => {
+const KakaoMap = ({ onReturnPlaceChange }) => {
   const [place, setPlace] = useState("");
   const [returnPlace, setReturnPlace] = useState("");
 
@@ -47,15 +47,14 @@ const KakaoMap = ({onReturnPlaceChange}) => {
       kakao.maps.event.addListener(marker, "click", function () {
         infowindow.setContent(
           '<div style="padding:5px;font-size:12px;">' +
-          place.place_name +
-          "</div>"
+            place.place_name +
+            "</div>"
         );
         infowindow.open(map, marker);
-        setReturnPlace(place.place_name)
-        onReturnPlaceChange(place.place_name)
-        console.log(place.place_name)
+        setReturnPlace(place.place_name);
+        onReturnPlaceChange(place.place_name);
+        console.log(place.place_name);
       });
-
     }
   }, [place, onReturnPlaceChange]);
 
@@ -71,8 +70,8 @@ const KakaoMap = ({onReturnPlaceChange}) => {
           setPlace(event.target.value);
         }}
         style={{
-          margin: '10px 0 0 0',
-          fontSize: '15px',
+          margin: "10px 0 0 0",
+          fontSize: "15px",
         }}
       />
       <p>장소 클릭 시 해당 장소가 저장됩니다.</p>
@@ -88,6 +87,6 @@ const KakaoMap = ({onReturnPlaceChange}) => {
       ></div>
     </div>
   );
-}
+};
 
 export default KakaoMap;
