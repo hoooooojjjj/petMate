@@ -7,7 +7,7 @@ const { kakao } = window;
 
 const KakaoMap = ({onReturnPlaceChange}) => {
   const [place, setPlace] = useState("");
-  const [returnPlace, setReturnPlace] = useState("ㅜㅜ");
+  const [returnPlace, setReturnPlace] = useState("");
 
   useEffect(() => {
     var infowindow = new kakao.maps.InfoWindow({ zIndex: 1 });
