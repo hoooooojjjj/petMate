@@ -37,6 +37,7 @@ export default function Signin() {
     signInWithEmailAndPassword(auth, signUp.email, signUp.password)
       .then((userCredential) => {
         // Signed in
+        console.log(auth)
         navigate("/MainPage", { state:  signUp.email});
       })
       .catch((error) => {});
@@ -47,6 +48,7 @@ export default function Signin() {
     const provider = new GoogleAuthProvider();
     signInWithPopup(auth, provider)
       .then((result) => {
+        // console.log(auth.email)
         navigate("/MainPage");
       })
       .catch((error) => {});

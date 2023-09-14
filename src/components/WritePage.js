@@ -31,7 +31,7 @@ const WritePage = ({ onInsert }) => {
 
     const { state } = useLocation();
     const [userId, setUserId] = useState("");
-    // console.log(state);
+    console.log(state);
     useEffect(() => {
         if (state === null) {
             window.alert("재로그인이 필요합니다.");

@@ -31,17 +31,24 @@ export default function MainPage({ user, isLogin }) {
   const [posts, setPosts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredPosts, setFilteredPosts] = useState([]);
-  
+
   const { state } = useLocation();
-    // console.log(state);
-    const userId = state;
+  // console.log(state);
+  const userId = state;
+  // console.log(user.displayName)
+  // console.log(user)
+
 
   const write = () => {
     if (!isLogin) {
       alert("로그인이 필요합니다.");
       return;
     }
-        navigate("/WritePage", { state: userId});
+    if (user.displayName == null) {
+      navigate("/WritePage", { state: userId });
+    } else {
+      navigate("/WritePage", { state: user.displayName });
+    }
   };
 
   const handleSignInClick = async () => {
@@ -76,8 +83,8 @@ export default function MainPage({ user, isLogin }) {
       posts.filter((post) =>
         post.contents.inputTitle
           ? post.contents.inputTitle
-              .toLowerCase()
-              .includes(searchTerm.toLowerCase())
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase())
           : false
       )
     );
