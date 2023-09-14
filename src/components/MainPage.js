@@ -184,7 +184,7 @@ function Post({ post, addComment, user, isLogin }) {
     >
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <Box sx={{ flex: 2 }}>
-          <Typography variant="subtitle2" sx={{ flex: 1, textAlign: "center" }}>
+          <Typography variant="subtitle2" sx={{ flex: 1, marginBottom: 1 }}>
             {post.contents.userId}
           </Typography>
         </Box>
