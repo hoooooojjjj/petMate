@@ -136,7 +136,7 @@ export default function MainPage({ user, isLogin }) {
         <TextField
           label="검색어를 입력해주세요"
           variant="outlined"
-          sx={{ width: "70%", textAlign: "center" }}
+          sx={{ width: "85%", textAlign: "center" }}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
